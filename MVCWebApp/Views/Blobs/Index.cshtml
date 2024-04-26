@@ -1,0 +1,62 @@
+﻿<html>
+<body>
+    <h2>
+        Save Picture
+    </h2>
+
+    <form asp-action="Upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="picture" />
+        <button class="btn btn-primary" type="submit"> Save</button>
+    </form>
+
+    <h2>Logs</h2>
+    @foreach (var item in ViewBag.logs as List<string>)
+    {
+        <strong>@item</strong>
+        <br />
+    }
+
+    <h2>
+        Pictures
+    </h2>
+
+    <table class="table table-bordered">
+        <tr>
+            <td>Picture</td>
+            <td>Name</td>
+            <td>Actions</td>
+        </tr>
+
+        @foreach (var item in ViewBag.blobs as List<FileBlob>)
+        {
+            <tr id="@item.Name">
+                <td>
+                    <img src="@item.Url" class="img-thumbnail" style="width:100px;" />
+                </td>
+                <td id="namee">
+                    @item.Name
+                </td>
+                <td>
+                    <a class="btn btn-warning" asp-action="Download" asp-route-filename="@item.Name">Download</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-filename="@item.Name">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+    <iframe id="pdfViewer" style="width:50%; height:50vh"></iframe>
+</body>
+</html>
+
+
+<script>
+    var rows = document.querySelectorAll("tr");
+    rows.forEach(function (row) {
+        row.addEventListener("click", function () {
+            var pdfName = this.id + "&embedded=true";
+            var link = "";
+            var pdfUrl = link + pdfName;
+            console.log(pdfUrl);
+            document.getElementById("pdfViewer").src = pdfUrl;
+        });
+    });
+</script>
